@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data Ajax</title>
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    td, th {
+        border: 2px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: rgb(91, 91, 223);
+    }
+    .loadbtn {
+        text-align: center;
+        padding: 10px;
+        background-color: aquamarine;
+    }
+    .btn {
+        color: brown;
+        width: 100px;
+        height: 50px;
+        cursor: pointer;
+        border: 2px solid firebrick;
+        box-shadow: 1px 2px 4px rgba(0, o, o, 0.4);
+    }
+    .title-ajax {
+        text-align: center;
+        background-color: khaki;
+        padding: 10px;
+    }
+    </style>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="title-ajax">
+        <h2>PHP with Ajax</h2>
+    </div>
+    <div class="loadbtn" id="loadbtn">
+        <button class="btn" id="ldbtn">Load Data</button>
+    </div>
+    <div class="show-data-table">
+        <table id="table-data">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Zamstechie</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('#ldbtn').on('click', function(e){
+                $.ajax({
+                    url:"ajax-data.php",
+                    type: "POST",
+                    loader: true,
+                    success: function(data){
+                        $('#table-data').html(data)
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
