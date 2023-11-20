@@ -20,9 +20,9 @@
     th {
         background-color: rgb(91, 91, 223);
     }
-    .loadbtn {
+    .add-data {
         text-align: center;
-        padding: 10px;
+        padding: 30px;
         background-color: aquamarine;
     }
     .btn {
@@ -38,15 +38,31 @@
         background-color: khaki;
         padding: 10px;
     }
+    div#error-message {
+    color: red;
+    position: absolute;
+    top: 10px;
+    }
+    div#success-message {
+    color: green;
+    position: absolute;
+    top: 10px;
+    }
     </style>
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="title-ajax">
-        <h2>PHP with Ajax</h2>
+        <h1>Add Records with PHP & Ajax</h1>
     </div>
-    <div class="loadbtn" id="loadbtn">
-        <button class="btn" id="ldbtn">Load Data</button>
+    <div class="add-data" id="add-data">
+        <form id="refresh-form">
+            <label for="fsname">First Name : </label>
+            <input type="text" class="first-name" id="fsname">
+            <label for="fsname">Last Name : </label>
+            <input type="text" class="last-name" id="lsname">&nbsp;&nbsp;&nbsp;
+            <input type="submit" class="save-data" id="save-data">
+        </form>
     </div>
     <div class="show-data-table">
         <table id="table-data">
@@ -61,18 +77,46 @@
                 </tr>
             </tbody>
         </table>
+        <div id="error-message"></div>
+        <div id="success-message"></div>
     </div>
     <script>
         $(document).ready(function(){
-            $('#ldbtn').on('click', function(e){
-                $.ajax({
-                    url:"ajax-data.php",
+           function loadData(){
+            $.ajax({
+                    url:"load.php",
                     type: "POST",
                     loader: true,
                     success: function(data){
                         $('#table-data').html(data)
                     }
                 });
+            }
+            loadData();
+            $('#save-data').on('click', function(e){
+                e.preventDefault();
+                var fname = $('#fsname').val();
+                var lsname = $('#lsname').val();
+                if(fname == "" || lsname == ""){
+                    $("#error-message").html('these field are required').slideDown();
+                    $("#success-message").slideUp();
+                }else {
+                    $.ajax({
+                        url: "ajax-insert.php",
+                        type: "POST",
+                        data: {f_name:fname, l_name: lsname},
+                        success: function(result){
+                            if(result == 1){
+                                loadData();
+                                $('#refresh-form').trigger('reset');
+                                $("#success-message").html('Data save successfully').slideDown();
+                                $("#error-message").slideUp();
+                            } else {
+                                $("#error-message").html("Can't save data").slideDown();
+                            }
+                        }
+                    })
+                }
             });
         });
     </script>
